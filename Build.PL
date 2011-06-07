@@ -7,6 +7,7 @@ my $build = new Module::Build (
 	module_name	=> 'Bio::Polloc::Polloc::Root',
 	description	=> 'Polymorphic Loci analysis',
 	dist_name	=> 'Bio::Polloc',
+	dist_version_from	=> 'lib/Bio/Polloc/Polloc/Version.pm',
 	dist_author	=> 'Luis M. Rodriguez-R <lmrodriguezr@gmail.com>',
 	dist_abstract	=> 'Polymorphic Loci analysis',
 	license		=> 'perl',
@@ -34,7 +35,7 @@ my $build = new Module::Build (
 	create_makefile_pl	=> 'traditional',
 );
 
-for my $pl (qw(polloc_vntrs)){
+for my $pl (qw(polloc_vntrs polloc_primers polloc_gel)){
    my $script = File::Spec->catfile('scripts', "$pl.pl");
    $build->scripts($script) if $build->y_n("Do you want to install the $script script to $Config{installscript}?", 'n');
 }

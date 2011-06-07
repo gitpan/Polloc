@@ -16,7 +16,6 @@ syntaxis.
 package Bio::Polloc::Polloc::Config;
 use base qw(Bio::Polloc::Polloc::Root Bio::Polloc::Polloc::IO);
 use strict;
-our $VERSION = $Bio::Polloc::Polloc::Root::VERSION;
 
 =head1 GLOBALS
 
@@ -355,7 +354,8 @@ The parsed (uniform) namespace.
 =cut
 
 sub _parse_space {
-   my($self,$space) = @_;
+   my($self, $space) = @_;
+   return '.' unless defined $space;
    my $out = lc $space;
    $out = "." . $out unless $out =~ m/^\./;
    $self->throw("Invalid space name <$out>", $space) unless $out =~ m/^[\w\.]+(\.\*)?$/i;
