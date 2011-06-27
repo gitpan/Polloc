@@ -25,7 +25,7 @@ L<Bio::Polloc::Polloc::IO>
 package Bio::Polloc::RuleIO;
 use strict;
 use base qw(Bio::Polloc::Polloc::Root Bio::Polloc::Polloc::IO);
-our $VERSION = 1.0502; # [a-version] from Bio::Polloc::Polloc::Version
+our $VERSION = 1.0503; # [a-version] from Bio::Polloc::Polloc::Version
 
 
 =head1 PUBLIC METHODS
@@ -47,6 +47,10 @@ The same arguments of L<Bio::Polloc::Polloc::IO>, plus:
 =item -format
 
 The format of the file
+
+=item -genomes
+
+The genomes to be scaned
 
 =back
 
@@ -72,6 +76,8 @@ sub new {
          my $self = $class->SUPER::new(@args);
 	 $self->debug("Got the RuleIO class $class ($1)");
 	 $self->format($1);
+	 my ($genomes) = $self->_rearrange([qw(GENOMES)], @args);
+	 $self->genomes($genomes);
          $self->_initialize(@args);
          return $self;
       }
@@ -238,7 +244,7 @@ sub groupcriteria {
 
 =head2 grouprules
 
-Alias of L<groupcriteria()> (for backwards-compatibility).
+Alias of L<groupcriteria> (for backwards-compatibility).
 
 =cut
 
@@ -316,6 +322,7 @@ sub execute {
    my $locigroup = Bio::Polloc::LociGroup->new(
    		-name=>'Full collection - '.time().".".rand(1000),
    		-genomes=>$self->genomes);
+   $self->throw("Impossible to execute without genomes") unless defined $self->genomes;
    for my $gk (0 .. $#{$self->genomes}){
       my $genome = $self->genomes->[$gk];
       $self->_end_rules_loop;

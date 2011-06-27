@@ -6,6 +6,10 @@ Bio::Polloc::Genome - A group of sequences from the same organism
 
 Email lmrodriguezr at gmail dot com
 
+=head1 LICENSE
+
+This package is licensed under the Artistic License - see LICENSE.txt
+
 =head1 IMPLEMENTS OR EXTENDS
 
 =over
@@ -22,7 +26,7 @@ package Bio::Polloc::Genome;
 use strict;
 use base qw(Bio::Polloc::Polloc::Root);
 use Bio::SeqIO;
-our $VERSION = 1.0502; # [a-version] from Bio::Polloc::Polloc::Version
+our $VERSION = 1.0503; # [a-version] from Bio::Polloc::Polloc::Version
 
 
 =head1 PUBLIC METHODS
@@ -31,9 +35,13 @@ Methods provided by the package
 
 =head2 new
 
+=over
+
+=item 
+
 The basic initialization method
 
-B<Arguments>
+=item Arguments
 
 =over
 
@@ -47,6 +55,8 @@ The file containing the (multi-)fasta with the genome.
 
 =back
 
+=back
+
 =cut
 
 sub new {
@@ -56,9 +66,54 @@ sub new {
    return $self;
 }
 
+=head2 build_set
+
+=over
+
+=item 
+
+Builds a set of genomes.
+
+=item Arguments
+
+=over
+
+=item -files I<arrayref>
+
+An arrayref containing the files from which genomes must be build.
+
+=item -names I<arrayref>
+
+An arrayref containing the names of the genomes (in the same order
+of the files).
+
+=back
+
+=back
+
+=cut
+
+sub build_set {
+   my($self, @args) = @_;
+   my($files, $names) = $self->_rearrange([qw(FILES NAMES)], @args);
+   return unless defined $files;
+   $names||= [];
+   my $out = [];
+   for my $i (0 .. $#$files){
+      push @$out, Bio::Polloc::Genome->new(-file=>$files->[$i], -name=>$names->[$i]);
+   }
+   return $out;
+}
+
 =head2 file
 
+=over
+
+=item 
+
 Sets/gets the file containing the genome
+
+=back
 
 =cut
 
@@ -73,11 +128,17 @@ sub file {
 
 =head2 get_sequences
 
+=over
+
+=item 
+
 Gets the collection of sequences.
 
-B<Returns>
+=item Returns
 
 An array of L<Bio::Seq> objects.
+
+=back
 
 =cut
 
@@ -94,15 +155,21 @@ sub get_sequences {
 
 =head2 search_sequence
 
+=over
+
+=item 
+
 Search a sequence by ID
 
-B<Arguments>
+=item Arguments
 
 The id (I<str>) of the sequence.
 
-B<Returns>
+=item Returns
 
 The sequence (L<Bio::Seq>) or C<undef>.
+
+=back
 
 =cut
 
@@ -118,8 +185,13 @@ sub search_sequence {
 
 =head2 name
 
-Gets/sets the name of the genome.  If no name is set,
-tries to use the file instead.
+=over
+
+=item 
+
+Gets/sets the name of the genome.  If no name is set, tries to use the file instead.
+
+=back
 
 =cut
 

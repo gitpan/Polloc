@@ -20,7 +20,7 @@ Email lmrodriguezr at gmail dot com
 package Bio::Polloc::Typing::bandingPattern;
 use base qw(Bio::Polloc::TypingI);
 use strict;
-our $VERSION = 1.0502; # [a-version] from Bio::Polloc::Polloc::Version
+our $VERSION = 1.0503; # [a-version] from Bio::Polloc::Polloc::Version
 
 
 =head1 APPENDIX
@@ -44,9 +44,9 @@ sub new {
 
 =head2 scan
 
-See L<Bio::Polloc::TypingI-E<gt>scan()>.
+See L<Bio::Polloc::TypingI-E<gt>scan>.
 
-L<fragments()> must be implemented by the C<Bio::Polloc::Typing::bandingPattern::*>
+L<fragments> must be implemented by the C<Bio::Polloc::Typing::bandingPattern::*>
 object.
 
 =cut
@@ -62,10 +62,10 @@ sub scan {
 
 =head2 typing_value
 
-See L<Bio::Polloc::TypingI-E<gt>typing_value()>.
+See L<Bio::Polloc::TypingI-E<gt>typing_value>.
 
-Returns the size of the loci between the minimum (L<min_size()>)
-and the maximum (L<max_size()>) size.
+Returns the size of the loci between the minimum (L<min_size>)
+and the maximum (L<max_size>) size.
 
 =head3 Returns
 
@@ -88,7 +88,7 @@ sub typing_value {
 
 =head2 graph_content
 
-Generates the expected gel.  See L<Bio::Polloc::TypingI-E<gt>graph()>.
+Generates the expected gel.  See L<Bio::Polloc::TypingI-E<gt>graph>.
 
 =cut
 
@@ -133,11 +133,14 @@ sub graph_content {
 	 	unless UNIVERSAL::can($l, 'isa') and $l->isa('Bio::Polloc::LocusI');
 	 my $y1 = $nameh + int($nh*($maxa - $l->length));
 	 my $y2 = $y1 + $lh;
+	 my $S = ($l->score || 100) * 255 / 100;
+	 my $b1 = $img->alphaColor($S, $S, $S, 0);
+	 my $b2 = $img->alphaColor($S/2, $S/2, $S/2, 0);
+	 $img->bgcolor($b2);
+	 $img->fgcolor($b2);
+	 $img->rectangle($x1, $y1-int($lh*0.75), $x2, $y2+int($lh*0.75));
 	 $img->bgcolor($b1);
 	 $img->fgcolor($b1);
-	 $img->rectangle($x1, $y1-int($lh*0.75), $x2, $y2+int($lh*0.75));
-	 $img->bgcolor($white);
-	 $img->fgcolor($white);
 	 $img->rectangle($x1, $y1, $x2, $y2);
 	 $self->debug("Band from $y1 to $y2");
       }

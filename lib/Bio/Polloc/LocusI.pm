@@ -24,7 +24,7 @@ use base qw(Bio::Polloc::Polloc::Root);
 use Bio::Polloc::RuleI;
 use Bio::Polloc::Polloc::IO;
 use List::Util qw(min max);
-our $VERSION = 1.0502; # [a-version] from Bio::Polloc::Polloc::Version
+our $VERSION = 1.0503; # [a-version] from Bio::Polloc::Polloc::Version
 
 
 =head1 PUBLIC METHODS
@@ -576,7 +576,8 @@ sub rule {
 
 =head2 score
 
-Gets the score of the feature
+Sets/gets the score of the feature.  Most loci implement
+different score functions, and it's often read-only.
 
 B<Returns>
 
@@ -588,8 +589,12 @@ L<Bio::Polloc::Polloc::NotImplementedException> if not implemented
 
 =cut
 
-sub score { $_[0]->throw("score",$_[0],"Bio::Polloc::Polloc::NotImplementedException") }
-
+sub score {
+   my($self,$value) = @_;
+   my $k = '_score';
+   $self->{$k} = $value if defined $value;
+   return $self->{$k};
+}
 
 =head2 seq
 

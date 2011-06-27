@@ -15,7 +15,7 @@ Email lmrodriguezr at gmail dot com
 package Bio::Polloc::Locus::amplicon;
 use base qw(Bio::Polloc::LocusI);
 use strict;
-our $VERSION = 1.0502; # [a-version] from Bio::Polloc::Polloc::Version
+our $VERSION = 1.0503; # [a-version] from Bio::Polloc::Polloc::Version
 
 
 =head1 APPENDIX
@@ -132,14 +132,17 @@ Gets the score
 
 =head3 Returns
 
-The score (float or undef).
+The score (float or undef). As the percentage of the primers
+matching the target sequence.
 
 =cut
 
 sub score {
    my($self,$value) = @_;
    $self->warn("Trying to set value via read-only method 'score()'") if defined $value;
-   return 100*$self->errors/$self->length;
+   return 100 - 100 * ($self->errors || 0) * (
+   		$self->fwd_primer and $self->rev_primer ?
+		1/length $self->fwd_primer . $self->rev_primer : 1);
 }
 
 =head2 errors

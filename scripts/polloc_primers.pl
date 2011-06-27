@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
 use strict;
-use Bio::Polloc::LocusIO 1.5010;
+use Bio::Polloc::LocusIO 1.0501;
 use Bio::Polloc::Genome;
 use Bio::Polloc::LociGroup;
 use Bio::Polloc::TypingI;
 
-sub usage($);
+use Pod::Usage;
 
 # ------------------------------------------------- INPUT
 my $gff_in =  shift @ARGV;
@@ -19,7 +19,7 @@ my $error  = (shift @ARGV || 0)+0;
 my @names  = split /:/, shift @ARGV;
 my @inseqs = @ARGV;
 
-&usage('') unless $gff_in and $groups and $out and $#inseqs > -1;
+pod2usage(1) unless $gff_in and $groups and $out and $#inseqs > -1;
 Bio::Polloc::Polloc::Root->DEBUGLOG(-file=>">$out.log");
 $Bio::Polloc::Polloc::Root::VERBOSITY = 4;
 
@@ -48,9 +48,10 @@ my $typing = Bio::Polloc::TypingI->new(
 	-type=>'bandingPattern::amplification',
 	-primerSize=>$len,
 	-primerConservation=>($cons/100),
-	-maxSize=>2000);
-# Alternatively, this can be set with (but remember to use Bio::Polloc::TypingIO): 
-# my $typing = Bio::Polloc::TypingIO->new(-file=>'t/vntrs.bme');
+	-maxSize=>2000,
+	-annealingErrors=>$error);
+# Alternatively, this can be set with (but remember to "use Bio::Polloc::TypingIO;"): 
+# my $typing = Bio::Polloc::TypingIO->new(-file=>'t/vntrs.bme')->typing;
 
 GROUP: for my $lgroupId (0 .. $#gr){
    my $lgroup = $gr[$lgroupId];
@@ -66,45 +67,115 @@ GROUP: for my $lgroupId (0 .. $#gr){
    }
 }
 
-# ------------------------------------------------- SUBROUTINES
-sub usage($) {
-   my $m = shift;
-   print "$m\n" if $m;
-   print <<HELP
+__END__
 
-   polloc_primers.pl - Designs primers to amplify the groups of loci
-   in the given genomes and attempts to runs an in silico PCR.
+=pod
 
-   Usage: $0 [Params]
-   Params, in that order:
-      gff (path):	GFF3 file containing the loci to amplify.
-      			Example: /tmp/polloc-vntrs.out.gff
-      groups (path):	File containing the IDs of the grouped loci.
-      			One line per group, and the IDs separated by
-			spaces.
-			Example: /tmp/polloc-vntrs.out.groups
-      out (path):	Path to the base of the output files.
-      			Example: /tmp/polloc-primers.out
-      draw (str):	Should I produce graphical output?
-      			Possible values: 'on' and '' (empty string).
-      cons (float):	Consensus percentage for primers design.
-			Default: 100
-      len (int):	Length of the primers.
-			Default: 20
-      error (float):	Number of allowed mismatches during in silico
-      			amplification.
-			Default: 0
-      names (str):	The names of the genomes separated by colons (:).
-      			Alternatively, can be an empty string ('') to
-			assign genome names from files.
-      			Example: Xci3:Xeu8:XamC
-      inseqs (paths):	Sequences to scan (input).  Each argument will be
-      			considered a single genome, and the values of
-			'names' will be applied.  The order of the inseqs
-			must be the same of the names.
-			Example: /data/Xci3.fa /data/Xeu8.fa /data/XamC.fa
-      
-HELP
-   ;exit;
-}
+=head1 AUTHOR
+
+Luis M. Rodriguez-R < lmrodriguezr at gmail dot com >
+
+=head1 DESCRIPTION
+
+polloc_primers.pl - Designs primers to amplify the groups of loci in the
+given genomes and attempts to run an in silico PCR.
+
+=head1 LICENSE
+
+This script is distributed under the terms of
+I<The Artistic License>.  See LICENSE.txt for details.
+
+=head1 SYNOPSIS
+
+C<perl polloc_vntrs.pl> B<arguments>
+
+The arguments must be in the following order:
+
+=over
+
+=item Input gff
+
+GFF3 file containing the loci to amplify.
+
+Example: C<"/tmp/polloc-vntrs.out.gff">.
+
+=item Groups
+
+File containing the IDs of the grouped loci. One line
+per group, and the IDs separated by spaces.
+
+Example: C<"/tmp/polloc-vntrs.out.groups">.
+
+=item Output
+
+Path to the base of the output files.
+
+Example: C<"/tmp/polloc-primers.out">.
+
+=item Draw
+
+Should I produce graphical output?  Any non-empty string to
+generate PNG images, or empty string (C<''>) to ignore graphical
+output.
+
+=item Consensus (I<float>)
+
+Consensus percentage for primers design.
+
+Default: C<100>.
+
+=item Length (I<int>)
+
+Length of the primers.
+
+Default: C<20>.
+
+=item Errors (I<int>)
+
+Percentage of allowed mismatches during *in silico*
+amplification.
+
+Default: C<0>.
+
+=item Names
+
+The names of the genomes separated by colons (C<:>). Alternatively,
+it can be an empty string (C<''>) to assign genome names from files.
+
+Example: C<"Xci3:Xeu8:XamC">
+
+=item Inseqs
+
+Sequences to scan (input).  Each argument will be
+considered a single genome, and the values of 'names' will be
+applied.  The order of the inseqs must be the same of the names.
+
+Example 1: C<"/data/Xci3.fa" "/data/Xeu8.fa" "/data/XamC.fa">
+
+Example 2: C</data/X*.fa> (unquoted)
+
+=back
+
+Run C<perl polloc_primers.pl> without arguments to see the help
+message.
+
+=head1 SEE ALSO
+
+=over
+
+=item *
+
+L<Bio::Polloc::LocusIO>
+
+=item *
+
+L<Bio::Polloc::Genome>
+
+=item *
+
+L<Bio::Polloc::TypingI>
+
+=back
+
+=cut
 

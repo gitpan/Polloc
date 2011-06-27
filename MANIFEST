@@ -1,4 +1,5 @@
 Build.PL
+examples/vntrs.bme
 lib/Bio/Polloc.pm
 lib/Bio/Polloc/Genome.pm
 lib/Bio/Polloc/GroupCriteria.pm
@@ -39,16 +40,22 @@ lib/Bio/Polloc/TypingI.pm
 lib/Bio/Polloc/TypingIO.pm
 lib/Bio/Polloc/TypingIO/cfg.pm
 LICENSE.txt
+Makefile.PL
 MANIFEST			This list of files
+META.yml
 README.md
 README.txt
+scripts/polloc_detect.pl
+scripts/polloc_experiment.pl
 scripts/polloc_gel.pl
+scripts/polloc_group.pl
 scripts/polloc_primers.pl
 scripts/polloc_vntrs.pl
 t/00-load/polloc.t
 t/01-genomes/01-genome.t
 t/02-rules/01-ruleio.t
 t/02-rules/02-rulei.t
+t/02-rules/03-rule/crispr.t
 t/02-rules/03-rule/pattern.t
 t/02-rules/03-rule/repeat.t
 t/02-rules/03-rule/tandemrepeat.t
@@ -56,11 +63,11 @@ t/03-loci/01-locusio.t
 t/04-grouping/01-groupcriteria.t
 t/05-typing/01-typingio.t
 t/05-typing/02-typing.t
+t/crispr_seq.fasta
 t/loci.gff3
+t/loci_out.gff3
 t/loci_short.gff3
 t/multi.fasta
 t/repeats.fasta
 t/repeats.gff3
 t/vntrs.bme
-Makefile.PL
-META.yml

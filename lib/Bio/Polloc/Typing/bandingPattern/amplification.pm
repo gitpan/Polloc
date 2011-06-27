@@ -32,7 +32,7 @@ use base qw(Bio::Polloc::Typing::bandingPattern);
 use strict;
 use Bio::Polloc::Polloc::IO;
 use Bio::Polloc::LocusI;
-our $VERSION = 1.0502; # [a-version] from Bio::Polloc::Polloc::Version
+our $VERSION = 1.0503; # [a-version] from Bio::Polloc::Polloc::Version
 
 
 =head1 APPENDIX
@@ -203,7 +203,7 @@ sub flanking_size {
 
 =head2 annealing_errors
 
-Gets/sets the maximum number of errors allowed for a primer to anneal.
+Gets/sets the maximum percentage of errors allowed for a primer to anneal.
 0 by default.
 
 =cut
